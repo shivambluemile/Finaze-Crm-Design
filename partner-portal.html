@@ -1,0 +1,381 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Finaze Partner Portal</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+:root{--accent:#001A56;--accent-600:#0B2A7A;--navy-50:#EEF2FA;--brand:#2A5BD7;--text-strong:#101828;--text-body:#344054;--text-muted:#667085;--text-faint:#98A2B3;--border:#E4E7EC;--page:#F6F7F9;--card:#FFFFFF;--subtle:#F2F4F7;--danger:#D92D20;--danger-bg:rgba(217,45,32,.08);--success:#12A150;--success-bg:rgba(18,161,80,.12);--warn:#8A5A12;--warn-bg:rgba(232,162,60,.16);--info:#2A5BD7;--info-bg:rgba(42,91,215,.1)}
+*{box-sizing:border-box}html,body{margin:0;min-height:100%}
+body{font-family:Manrope,system-ui,-apple-system,Segoe UI,Roboto,sans-serif;color:var(--text-body);background:var(--page);-webkit-font-smoothing:antialiased}
+button,input,select,textarea{font-family:inherit}
+a{color:var(--brand)}
+.sr{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0)}
+/* auth shell */
+.auth{min-height:100vh;display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr)}
+.brand{position:relative;overflow:hidden;background:var(--accent);color:#fff;display:flex;flex-direction:column;justify-content:space-between;padding:48px clamp(32px,5vw,72px)}
+.brand .logo svg{height:30px;width:auto;display:block}.brand .logo svg path{fill:#fff}
+.brand h1{margin:0;font-size:clamp(34px,3.6vw,52px);line-height:1.08;letter-spacing:-.03em;font-weight:800;max-width:520px}
+.brand p{margin:16px 0 0;font-size:17px;line-height:1.6;color:rgba(255,255,255,.8);max-width:440px}
+.brand ul{list-style:none;margin:28px 0 0;padding:0;display:grid;gap:12px}
+.brand li{display:flex;gap:10px;align-items:center;font-size:15px;color:rgba(255,255,255,.88)}
+.brand li span{width:26px;height:26px;border-radius:8px;background:rgba(255,255,255,.12);display:flex;align-items:center;justify-content:center;font-size:13px}
+.brand .foot{font-size:12px;color:rgba(255,255,255,.55)}
+.orb{position:absolute;border-radius:50%;pointer-events:none}
+.o1{right:-120px;top:-120px;width:340px;height:340px;background:radial-gradient(circle at 30% 30%,rgba(42,91,215,.55),rgba(42,91,215,0) 70%)}
+.o2{right:60px;bottom:-160px;width:300px;height:300px;border:2px solid rgba(255,255,255,.12)}
+.panel{display:flex;align-items:center;justify-content:center;padding:40px 24px}
+.box{width:100%;max-width:440px}
+.box h2{margin:0;font-size:26px;letter-spacing:-.02em;color:var(--text-strong)}
+.box .lede{margin:6px 0 24px;font-size:14px;color:var(--text-muted);line-height:1.55}
+.field{display:flex;flex-direction:column;gap:7px;margin-bottom:16px}
+.field label{font-size:13px;font-weight:600;color:var(--text-body)}
+.ctl{position:relative;display:flex;align-items:center;height:46px;border:1px solid var(--border);border-radius:11px;background:var(--card);transition:border-color .15s,box-shadow .15s}
+.ctl:focus-within{border-color:var(--accent);box-shadow:0 0 0 3px rgba(0,26,86,.12)}
+.ctl.err{border-color:var(--danger)}
+.ctl input,.ctl select{flex:1;min-width:0;height:100%;border:0;background:none;outline:none;padding:0 14px;font-size:14px;font-weight:500;color:var(--text-strong)}
+.ctl select{appearance:none;cursor:pointer}
+textarea.ta{width:100%;min-height:84px;padding:12px 14px;border:1px solid var(--border);border-radius:11px;font-size:14px;color:var(--text-strong);outline:none;resize:vertical}
+textarea.ta:focus{border-color:var(--accent);box-shadow:0 0 0 3px rgba(0,26,86,.12)}
+.eye{width:42px;height:42px;border:0;background:none;color:var(--text-muted);cursor:pointer;display:flex;align-items:center;justify-content:center}
+.msg{font-size:12px;color:var(--danger)}
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:8px;height:46px;padding:0 18px;border:0;border-radius:11px;background:var(--accent);color:#fff;font-size:14px;font-weight:700;cursor:pointer;transition:background .15s}
+.btn:hover{background:var(--accent-600)}.btn[disabled]{opacity:.65;cursor:progress}
+.btn.block{width:100%}.btn.ghost{background:var(--card);color:var(--text-strong);border:1px solid var(--border)}.btn.ghost:hover{border-color:var(--accent);color:var(--accent);background:var(--card)}
+.btn.sm{height:36px;padding:0 14px;font-size:13px;border-radius:9px}
+.link{border:0;background:none;padding:0;color:var(--brand);font-size:13px;font-weight:700;cursor:pointer}
+.link:hover{text-decoration:underline}
+.alert{display:flex;gap:10px;align-items:flex-start;padding:12px 14px;border-radius:12px;font-size:13px;line-height:1.5;margin-bottom:16px}
+.alert b{display:block;color:inherit}
+.alert.bad{background:var(--danger-bg);color:#912018}.alert.warn{background:var(--warn-bg);color:var(--warn)}.alert.info{background:var(--navy-50);color:var(--accent)}.alert.good{background:var(--success-bg);color:#0B6B38}
+.row{display:flex;justify-content:space-between;align-items:center;gap:12px}
+.demo{margin-top:22px;border:1px dashed #C9CDD3;border-radius:12px;padding:12px 14px;background:#FBFCFD}
+.demo summary{cursor:pointer;font-size:12px;font-weight:700;color:var(--text-muted);list-style:none}
+.demo summary::-webkit-details-marker{display:none}
+.demo .acc{display:flex;justify-content:space-between;align-items:center;gap:10px;padding:8px 0;border-top:1px solid var(--subtle);font-size:12px}
+.demo .acc:first-of-type{border-top:0}
+.demo .acc b{color:var(--text-strong)}
+.chip{display:inline-flex;align-items:center;height:22px;padding:0 9px;border-radius:11px;font-size:11px;font-weight:700;white-space:nowrap}
+/* state screens (verify / setup / workspace / welcome / blocked) */
+.center{min-height:100vh;display:flex;align-items:center;justify-content:center;padding:32px 16px}
+.card{background:var(--card);border:1px solid var(--border);border-radius:18px;box-shadow:0 1px 2px rgba(16,24,40,.04);padding:32px}
+.card.w{width:100%;max-width:560px}
+.card .top{display:flex;align-items:center;justify-content:space-between;margin-bottom:22px}
+.card .top svg{height:24px;width:auto}
+.icon{width:52px;height:52px;border-radius:14px;display:flex;align-items:center;justify-content:center;margin-bottom:16px;font-size:24px}
+.icon.navy{background:var(--navy-50);color:var(--accent)}.icon.red{background:var(--danger-bg);color:var(--danger)}.icon.amber{background:var(--warn-bg);color:var(--warn)}.icon.green{background:var(--success-bg);color:var(--success)}
+.card h2{margin:0 0 6px;font-size:22px;letter-spacing:-.02em;color:var(--text-strong)}
+.card p{margin:0;font-size:14px;line-height:1.6;color:var(--text-muted)}
+.steps{display:flex;gap:6px;margin-bottom:20px}.steps span{flex:1;height:4px;border-radius:2px;background:var(--border)}.steps span.on{background:var(--accent)}
+.check{display:grid;gap:8px;margin:18px 0}
+.check div{display:flex;justify-content:space-between;align-items:center;gap:10px;padding:10px 12px;border:1px solid var(--border);border-radius:10px;font-size:13px}
+.check div b{color:var(--text-strong);font-weight:600}
+.otp{display:flex;gap:8px;margin:18px 0 8px}
+.otp input{width:48px;height:54px;text-align:center;font-size:22px;font-weight:700;border:1px solid var(--border);border-radius:11px;outline:none;color:var(--text-strong)}
+.otp input:focus{border-color:var(--accent);box-shadow:0 0 0 3px rgba(0,26,86,.12)}
+.ws{display:grid;gap:10px;margin:18px 0}
+.ws button{display:flex;align-items:center;gap:14px;width:100%;padding:14px;border:1px solid var(--border);border-radius:14px;background:var(--card);cursor:pointer;text-align:left}
+.ws button:hover,.ws button.on{border-color:var(--accent);box-shadow:0 0 0 3px rgba(0,26,86,.08)}
+.av{flex:none;width:42px;height:42px;border-radius:12px;background:var(--accent);color:#fff;font-weight:800;display:flex;align-items:center;justify-content:center}
+.feat{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:10px;margin:20px 0}
+.feat div{padding:14px;border:1px solid var(--border);border-radius:12px;background:#FBFCFD}
+.feat b{display:block;margin-top:8px;font-size:13px;color:var(--text-strong)}.feat span{display:block;margin-top:3px;font-size:12px;color:var(--text-muted);line-height:1.45}
+.feat i{font-style:normal;font-size:18px}
+/* app */
+.app{min-height:100vh}
+.topbar{position:sticky;top:0;z-index:10;display:flex;align-items:center;justify-content:space-between;gap:16px;height:64px;padding:0 24px;background:var(--card);border-bottom:1px solid var(--border)}
+.topbar .l{display:flex;align-items:center;gap:16px}.topbar svg.lg{height:24px;width:auto}
+.tag{font-size:11px;font-weight:700;color:var(--accent);background:var(--navy-50);padding:4px 8px;border-radius:6px}
+.wsbtn{display:flex;align-items:center;gap:8px;height:38px;padding:0 12px;border:1px solid var(--border);border-radius:10px;background:var(--card);font-size:13px;font-weight:700;color:var(--text-strong);cursor:pointer}
+.user{position:relative}
+.user>button{display:flex;align-items:center;gap:10px;border:0;background:none;cursor:pointer}
+.user .ini{width:36px;height:36px;border-radius:50%;background:var(--accent);color:#fff;font-weight:800;font-size:13px;display:flex;align-items:center;justify-content:center}
+.menu{position:absolute;right:0;top:calc(100% + 8px);min-width:230px;padding:6px;background:var(--card);border:1px solid var(--border);border-radius:12px;box-shadow:0 18px 40px -16px rgba(0,26,86,.3);z-index:20}
+.menu button{display:flex;width:100%;align-items:center;gap:10px;height:38px;padding:0 10px;border:0;border-radius:8px;background:none;font-size:13px;font-weight:600;color:var(--text-body);cursor:pointer;text-align:left}
+.menu button:hover{background:var(--subtle)}.menu hr{border:0;border-top:1px solid var(--border);margin:6px 4px}.menu .lbl{padding:6px 10px 2px;font-size:11px;font-weight:700;color:var(--text-faint);text-transform:uppercase;letter-spacing:.05em}
+main.wrap{max-width:1120px;margin:0 auto;padding:28px 24px 48px}
+.head{display:flex;justify-content:space-between;align-items:flex-end;gap:16px;flex-wrap:wrap;margin-bottom:20px}
+.head h1{margin:0;font-size:26px;letter-spacing:-.02em;color:var(--text-strong)}.head p{margin:4px 0 0;font-size:14px;color:var(--text-muted)}
+.metrics{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:12px;margin-bottom:20px}
+.metric{background:var(--card);border:1px solid var(--border);border-radius:14px;padding:16px 18px}
+.metric span{font-size:12px;font-weight:600;color:var(--text-muted)}.metric b{display:block;margin-top:6px;font-size:24px;color:var(--text-strong);letter-spacing:-.02em}
+.metric small{display:block;margin-top:2px;font-size:12px;color:var(--text-faint)}
+.tablecard{background:var(--card);border:1px solid var(--border);border-radius:16px;overflow:hidden}
+.tabs{display:flex;gap:2px;padding:0 12px;border-bottom:1px solid var(--border)}
+.tabs button{height:46px;padding:0 12px;border:0;border-bottom:2px solid transparent;background:none;font-size:14px;font-weight:600;color:var(--text-muted);cursor:pointer;display:flex;align-items:center;gap:6px}
+.tabs button.on{color:var(--text-strong);font-weight:700;border-bottom-color:var(--accent)}
+.tabs .n{min-width:20px;height:20px;padding:0 6px;border-radius:10px;background:var(--subtle);font-size:11px;font-weight:700;display:flex;align-items:center;justify-content:center}
+.tr{display:grid;grid-template-columns:minmax(0,1.6fr) minmax(0,1fr) 120px 150px minmax(0,1.3fr);gap:16px;align-items:center;padding:14px 18px;border-top:1px solid var(--subtle);font-size:13px}
+.tr.h{border-top:0;height:40px;padding-top:0;padding-bottom:0;font-size:12px;font-weight:600;color:var(--text-muted)}
+.tr b{color:var(--text-strong);font-weight:700}.tr .m{color:var(--text-muted);font-size:12px}
+.empty{display:flex;flex-direction:column;align-items:center;text-align:center;gap:10px;padding:56px 24px}
+.empty .icon{margin:0}
+.empty h3{margin:0;font-size:17px;color:var(--text-strong)}.empty p{margin:0;max-width:420px;font-size:14px;line-height:1.6;color:var(--text-muted)}
+.skel{height:14px;border-radius:7px;background:linear-gradient(90deg,#EEF0F3,#F6F7F9,#EEF0F3);background-size:200% 100%;animation:sk 1.2s infinite}
+@keyframes sk{from{background-position:200% 0}to{background-position:-200% 0}}
+.modal{position:fixed;inset:0;z-index:50;display:flex;align-items:center;justify-content:center;padding:16px;background:rgba(16,18,24,.45)}
+.modal .card{width:100%;max-width:540px;max-height:calc(100vh - 32px);overflow:auto}
+.grid2{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px}
+.consent{display:flex;gap:10px;align-items:flex-start;font-size:13px;line-height:1.5;color:var(--text-body);margin:4px 0 16px;cursor:pointer}
+.consent input{margin-top:3px;width:16px;height:16px;accent-color:var(--accent)}
+.toast{position:fixed;left:50%;bottom:24px;transform:translateX(-50%);z-index:60;padding:12px 16px;border-radius:12px;background:var(--accent);color:#fff;font-size:13px;font-weight:700;box-shadow:0 18px 40px -16px rgba(0,26,86,.5)}
+.note{margin-top:28px;padding:14px 16px;border:1px dashed #C9CDD3;border-radius:12px;font-size:12px;line-height:1.6;color:var(--text-muted);background:#FBFCFD}
+.note b{color:var(--text-body)}
+@media (max-width:900px){.auth{grid-template-columns:1fr}.brand{min-height:auto;gap:28px}.metrics{grid-template-columns:repeat(2,minmax(0,1fr))}.feat{grid-template-columns:1fr}.tr{grid-template-columns:minmax(0,1fr) auto}.tr>:nth-child(2),.tr>:nth-child(3),.tr>:nth-child(5){display:none}}
+</style>
+</head>
+<body>
+<div id="app" aria-live="polite"></div>
+<script>
+(function () {
+  'use strict';
+  const LOGO = `<svg role="img" aria-label="Finaze" width="153" height="47" viewBox="0 0 153 47" fill="none" xmlns="http://www.w3.org/2000/svg">
+<path d="M42.9811 22.6893L33.7105 17.1971C33.4647 17.0518 33.1597 17.0518 32.9139 17.1971L15.076 27.9934C14.8388 28.1387 14.6947 28.3864 14.6947 28.6683L14.6523 35.7493C14.6523 36.014 14.7879 36.2703 15.0082 36.4156L18.5249 38.7046C18.7792 38.8669 19.1097 38.8755 19.3638 38.7046L27.5498 33.5199C27.8294 33.349 28.1769 33.3576 28.4396 33.5626L28.8803 33.9043C29.0836 34.0579 29.1938 34.2971 29.1853 34.5534L29.1514 35.9799C29.1514 36.2276 29.0327 36.4497 28.8379 36.5949L24.0416 40.225C23.6009 40.5581 23.6264 41.2329 24.1008 41.5318L32.5579 46.8618C32.702 46.9472 32.8631 46.9899 33.0241 46.9813L34.1087 46.9131C34.2359 46.9131 34.3629 46.8618 34.4732 46.7934L42.6336 41.677C42.8624 41.5319 43.015 41.3012 43.0658 41.0365C43.1335 40.6521 42.9641 40.2591 42.6336 40.0456L31.7699 33.1697C31.5834 33.0502 31.4564 32.8623 31.414 32.6486L31.3208 32.1362C31.2614 31.803 31.4055 31.4785 31.6937 31.3076L42.676 24.8503C42.8371 24.7563 42.9556 24.6111 43.0235 24.4317L43.3114 23.6203C43.4387 23.2614 43.2946 22.8601 42.9726 22.6722L42.9811 22.6893Z" fill="#001A56"></path>
+<path d="M42.4211 5.8368L34.0317 0.182304C33.6928 -0.0483173 33.2606 -0.0568589 32.9216 0.156679L24.6001 5.22181L24.3205 5.39264C23.668 5.78555 23.6426 6.73367 24.2781 7.16929L28.4981 10.0563C28.7778 10.2442 28.9474 10.5688 28.9557 10.9019L28.9982 13.285C28.9982 13.49 28.9133 13.6779 28.7524 13.8061C28.5405 13.9769 28.244 13.994 28.0151 13.8488L19.9563 8.70676C19.6258 8.50176 19.2106 8.49322 18.8716 8.68967L17.8548 9.29612L10.8044 13.4729L10.601 13.5925C9.67734 14.2673 9.40617 14.9079 9.63497 15.3606C9.65193 15.3862 9.6604 15.4119 9.67734 15.4375C9.6943 15.4631 9.71124 15.4887 9.7282 15.5058C9.75361 15.54 9.79598 15.5741 9.82988 15.6083C9.86378 15.634 9.89768 15.6596 9.93156 15.6852L14.0838 18.6833C14.3635 18.8712 14.533 19.1958 14.5414 19.5375L14.5838 21.929C14.5838 22.1341 14.4991 22.3305 14.3381 22.45C14.1262 22.621 13.8296 22.638 13.5924 22.4927L5.50812 17.3336C5.17764 17.1202 4.76241 17.1202 4.42344 17.3167L3.59299 17.812L0.474547 19.8792C0.177955 20.084 0 20.4172 0 20.776L0.0508441 26.6953C0.0508441 27.054 0.237273 27.3871 0.533864 27.575L4.28786 29.9496C4.61835 30.1546 5.03357 30.163 5.37254 29.9582L42.3787 7.61344C43.0312 7.22053 43.0565 6.26388 42.4211 5.8368Z" fill="#001A56"></path>
+<path d="M69.5835 15.0626H58.5804V20.3168H67.6717V23.8936H58.5804V32.78H54.5781V11.4859H69.5835V15.0626ZM71.7153 16.3381H75.7176V32.78H71.7153V16.3381ZM72.0317 14.4111C71.5733 13.9397 71.344 13.3806 71.344 12.7336C71.344 12.0867 71.5733 11.5275 72.0317 11.0561C72.4993 10.5848 73.0586 10.3491 73.7097 10.3491C74.3698 10.3491 74.9291 10.5848 75.3877 11.0561C75.8461 11.5275 76.0754 12.0867 76.0754 12.7336C76.0754 13.3806 75.8461 13.9397 75.3877 14.4111C74.9291 14.8824 74.3698 15.1181 73.7097 15.1181C73.0586 15.1181 72.4993 14.8824 72.0317 14.4111ZM83.0897 32.78H79.0874V16.3381H83.0897V18.8612H83.1446C84.1625 16.8556 85.7396 15.8529 87.876 15.8529C89.7557 15.8529 91.2823 16.5044 92.456 17.8076C93.6296 19.1015 94.2164 20.779 94.2164 22.84V32.78H90.2141V23.1311C90.2141 22.1237 89.8658 21.2688 89.1689 20.5664C88.472 19.8547 87.6377 19.499 86.6656 19.499C85.6663 19.499 84.818 19.8547 84.1212 20.5664C83.4335 21.2688 83.0897 22.1237 83.0897 23.1311V32.78ZM111.175 24.5451C111.175 23.1589 110.689 21.9713 109.717 20.9823C108.754 19.9934 107.581 19.499 106.196 19.499C104.821 19.499 103.642 19.9981 102.661 20.9961C101.689 21.985 101.203 23.168 101.203 24.5451C101.203 25.9499 101.689 27.1514 102.661 28.1496C103.642 29.1385 104.821 29.633 106.196 29.633C107.59 29.633 108.768 29.1385 109.731 28.1496C110.693 27.1514 111.175 25.9499 111.175 24.5451ZM111.175 32.78V30.146H111.12C110.597 31.0147 109.873 31.754 108.947 32.364C108.03 32.9648 106.943 33.2652 105.687 33.2652C103.285 33.2652 101.24 32.4335 99.553 30.7697C97.875 29.0969 97.0361 27.022 97.0361 24.5451C97.0361 22.0866 97.875 20.0257 99.553 18.3621C101.24 16.6893 103.285 15.8529 105.687 15.8529C107.906 15.8529 109.717 16.8094 111.12 18.7225H111.175V16.3381H115.177V32.78H111.175ZM131.861 19.9147L123.319 29.1478V29.2032H131.861V32.78H117.942V29.2032L126.497 19.9703V19.9147H117.942V16.3381H131.861V19.9147ZM151.391 24.5451C151.391 25.0904 151.317 25.6958 151.171 26.3612H138.036C138.32 27.3409 138.898 28.1496 139.769 28.7872C140.64 29.425 141.594 29.7439 142.63 29.7439C143.547 29.7439 144.427 29.5221 145.27 29.0785C146.123 28.6348 146.756 28.0618 147.168 27.3594L149.892 29.7717C149.066 30.853 148.017 31.7079 146.742 32.3364C145.468 32.9555 144.097 33.2652 142.63 33.2652C140.154 33.2652 138.05 32.4288 136.317 30.756C134.593 29.0739 133.731 27.0036 133.731 24.5451C133.731 22.0866 134.593 20.0257 136.317 18.3621C138.05 16.6893 140.154 15.8529 142.63 15.8529C145.05 15.8529 147.113 16.6985 148.819 18.3899C150.534 20.0719 151.391 22.1237 151.391 24.5451ZM138.063 22.9509H147.113C146.866 21.8879 146.329 21.0192 145.504 20.3446C144.679 19.6606 143.721 19.3186 142.63 19.3186C141.557 19.3186 140.59 19.6653 139.728 20.3584C138.866 21.0424 138.311 21.9065 138.063 22.9509Z" fill="#001A56"></path>
+</svg>`;
+  const $ = s => document.querySelector(s);
+  const esc = v => String(v == null ? '' : v).replace(/[&<>"']/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' })[c]);
+  const D = 864e5, now = () => Date.now();
+  const stamp = ts => { const d = new Date(ts), p = n => String(n).padStart(2, '0'); return p(d.getDate()) + '-' + p(d.getMonth() + 1) + '-' + d.getFullYear(); };
+  const ini = n => String(n || '?').split(/\s+/).filter(Boolean).map(w => w[0]).slice(0, 2).join('').toUpperCase();
+
+  // ---------------- prototype data layer (replace with API calls) ----------------
+  // Broker workspaces a partner can belong to. "harbour" reads the live CRM demo data (same browser storage as the CRM).
+  const WORKSPACES = { harbour: { id: 'harbour', name: 'Harbour Home Loans', broker: 'Demo User', role: 'Mortgage broker', source: 'crm' }, coastal: { id: 'coastal', name: 'Coastal Finance Co.', broker: 'Sam Patel', role: 'Mortgage broker', source: 'empty' } };
+  // Portal accounts (auth lives on the backend; these flags simulate what the API would return)
+  const ACCOUNTS = {
+    'priya.nair@raywhite.com': { partnerId: 'p1', name: 'Priya Nair', org: 'Ray White Parramatta', role: 'Real Estate Agent', ws: ['harbour'], perms: ['view', 'submit'], verified: true, active: true, note: 'First login → welcome → dashboard with referrals' },
+    'mark@chenco.com.au': { partnerId: 'p2', name: 'Mark Chen', org: 'Chen & Co Accountants', role: 'Accountant', ws: ['harbour', 'coastal'], perms: ['view', 'submit'], verified: true, active: true, note: 'Two brokers → choose a workspace' },
+    'sarah@leefp.com.au': { partnerId: 'p3', name: 'Sarah Lee', org: 'Lee Financial Planning', role: 'Financial Adviser', ws: ['harbour'], perms: ['view', 'submit'], verified: false, active: true, note: 'Email not verified → verify code' },
+    'tom@brownconvey.com.au': { partnerId: 'p4', name: 'Tom Brown', org: '', role: '', ws: ['harbour'], perms: ['view', 'submit'], verified: true, active: true, note: 'Missing organisation & role → setup' },
+    'olivia.grant@mcgrath.com.au': { partnerId: 'p5', name: 'Olivia Grant', org: 'McGrath Bondi', role: 'Real Estate Agent', ws: ['coastal'], perms: ['view'], verified: true, active: true, note: 'View-only access, no referrals yet' },
+    'james@walkertax.com.au': { partnerId: 'p6', name: 'James Walker', org: 'Walker Tax Advisory', role: 'Accountant', ws: ['harbour'], perms: ['view', 'submit'], verified: true, active: false, note: 'Inactive account' },
+    'nina@newagency.com.au': { partnerId: null, name: 'Nina Rossi', org: 'New Agency Realty', role: 'Real Estate Agent', ws: [], perms: [], verified: true, active: true, note: 'No broker relationship yet' },
+    'ken@lendlease-sales.com.au': { partnerId: null, name: 'Ken Ito', org: 'Lendlease Sales', role: 'Builder', ws: ['harbour'], perms: [], verified: true, active: true, note: 'Connected, but no permission to view referrals' }
+  };
+  const PASSWORD = 'Partner@123';
+  const store = { get(k, d) { try { const v = JSON.parse(localStorage.getItem(k)); return v == null ? d : v; } catch (e) { return d; } }, set(k, v) { try { localStorage.setItem(k, JSON.stringify(v)); } catch (e) { /* storage unavailable */ } } };
+  const prefs = () => store.get('finaze.portal', {});
+  const setPref = (email, patch) => { const p = prefs(); p[email] = { ...(p[email] || {}), ...patch }; store.set('finaze.portal', p); };
+  const account = email => { const a = ACCOUNTS[email]; if (!a) return null; const p = prefs()[email] || {}; return { email, ...a, ...(p.profile || {}), verified: p.verified != null ? p.verified : a.verified, onboarded: !!p.onboarded, lastWs: p.lastWs || '' }; };
+  const crm = () => { try { return JSON.parse(localStorage.getItem('finaze.leads') || 'null'); } catch (e) { return null; } };
+  const SEED = { partners: [], leads: [
+    { id: 'pl1', name: 'Emily Watts', service: 'Home loan', partner: 'p1', dir: 'in', status: 'new', arrived: now() - 3 * 36e5 },
+    { id: 'pl2', name: 'Ben Carter', service: 'Home loan', partner: 'p1', dir: 'in', status: 'contacted', arrived: now() - 45 * D },
+    { id: 'pl3', name: 'Sophie Tran', service: 'Home loan', partner: 'p1', dir: 'in', status: 'qualified', converted: true, dealStage: 'Settled', arrived: now() - 110 * D },
+    { id: 'pl4', name: 'Laura Mills', service: 'Buying or selling property', partner: 'p1', dir: 'out', status: 'new', arrived: now() - 70 * D },
+    { id: 'pl5', name: 'Daniel Kim', service: 'SMSF loan', partner: 'p2', dir: 'in', status: 'qualified', converted: true, dealStage: 'Lodged with Lender', arrived: now() - 2 * D }
+  ], deals: [] };
+  // partner-facing status: never exposes internal notes, values or broker-only stages
+  function statusOf(l, deals) {
+    const dl = (deals || []).find(x => x.id === l.dealId || x.leadId === l.id); const stage = dl ? dl.stage : l.dealStage;
+    if (dl && dl.archived) return ['Closed', 'var(--subtle)', 'var(--text-muted)', 'This enquiry didn’t go ahead'];
+    if (stage === 'Settled') return ['Settled', 'var(--success-bg)', '#0B6B38', 'Loan settled — thank you!'];
+    if (stage && /Lodged|Approval|Loan Docs/.test(stage)) return ['Application in progress', 'var(--info-bg)', 'var(--info)', 'Application is with the lender'];
+    if (stage || l.converted) return ['Working with client', 'var(--info-bg)', 'var(--info)', 'Broker is preparing options'];
+    if (l.status === 'unqualified') return ['Not proceeding', 'var(--subtle)', 'var(--text-muted)', 'Client isn’t proceeding at this time'];
+    if (l.status === 'contacted' || l.status === 'qualified') return ['Contacted', 'var(--warn-bg)', 'var(--warn)', 'Broker has spoken with the client'];
+    return ['Received', 'var(--navy-50)', 'var(--accent)', 'Waiting for the broker to make contact'];
+  }
+  // simulated API: resolves workspace data for a partner, can be forced to fail (demo tools)
+  function loadWorkspace(acc, wsId) {
+    return new Promise((res, rej) => setTimeout(() => {
+      if (S.failNext) { S.failNext = false; return rej(new Error('network')); }
+      const ws = WORKSPACES[wsId]; if (!ws || !acc.ws.includes(wsId)) return rej(new Error('forbidden'));
+      if (ws.source !== 'crm') return res({ ws, received: [], sent: [] });
+      const d = crm() || { ...SEED, leads: [...store.get('finaze.portal.local', []), ...SEED.leads] }, leads = (d.leads || []).filter(l => l.partner === acc.partnerId);
+      const map = l => { const st = statusOf(l, d.deals); return { id: l.id, name: l.name, service: l.service || '—', at: l.arrived, status: st[0], bg: st[1], color: st[2], update: st[3] }; };
+      res({ ws, received: leads.filter(l => l.dir !== 'out').map(map).sort((a, b) => b.at - a.at), sent: leads.filter(l => l.dir === 'out').map(l => ({ id: l.id, name: l.name, service: l.service || '—', at: l.arrived, status: 'Sent to you', bg: 'var(--warn-bg)', color: 'var(--warn)', update: 'Referred to you by your broker' })).sort((a, b) => b.at - a.at) });
+    }, 650));
+  }
+  // simulated API: submit a referral — written into the CRM's Leads so the broker sees it straight away
+  function submitReferral(acc, f) {
+    const d = crm(), id = 'lp' + now().toString(36), at = now();
+    if (!d) { store.set('finaze.portal.local', [{ id, name: f.name, service: f.service, partner: acc.partnerId, dir: 'in', status: 'new', arrived: at }, ...store.get('finaze.portal.local', [])]); return Promise.resolve(id); }
+    d.leads = [{ id, name: f.name, email: f.email, phone: f.phone, source: 'partner', partner: acc.partnerId, service: f.service, status: 'new', dir: 'in', arrived: at, converted: false, contactId: '', notes: f.note ? [{ text: f.note, by: acc.name + ' (partner)', at }] : [], history: [{ text: 'Referral submitted through the Partner Portal', at }] }, ...(d.leads || [])];
+    localStorage.setItem('finaze.leads', JSON.stringify(d)); return Promise.resolve(id);
+  }
+
+  // ---------------- state ----------------
+  const S = { view: 'signin', email: '', err: {}, alert: null, attempts: {}, lockUntil: 0, acc: null, wsPick: '', data: null, tab: 'received', menu: false, wsMenu: false, modal: null, toast: '', failNext: false };
+  const sess = { get() { try { return JSON.parse(sessionStorage.getItem('finaze.portal.session') || 'null'); } catch (e) { return null; } }, set(v) { try { sessionStorage.setItem('finaze.portal.session', JSON.stringify(v)); } catch (e) { /* ignore */ } }, clear() { try { sessionStorage.removeItem('finaze.portal.session'); } catch (e) { /* ignore */ } } };
+  const go = (view, patch) => { Object.assign(S, patch || {}, { view }); render(); window.scrollTo(0, 0); };
+  const toast = m => { S.toast = m; render(); clearTimeout(S.tt); S.tt = setTimeout(() => { S.toast = ''; render(); }, 2800); };
+  const alive = () => { const x = sess.get(); if (!x || x.exp < now()) { S.acc = null; sess.clear(); go('expired'); return false; } x.exp = now() + 30 * 60e3; sess.set(x); return true; };
+
+  // decides the next step after authentication — the single source of truth for the journey
+  function route(acc) {
+    S.acc = acc;
+    if (!acc.active) return go('inactive');
+    if (!acc.verified) return go('verify');
+    const missing = ['org', 'role'].filter(k => !String(acc[k] || '').trim());
+    if (missing.length) return go('setup', { missing });
+    if (!acc.ws.length) return go('noaccess');
+    if (!acc.perms.includes('view')) return go('denied');
+    if (acc.ws.length > 1 && !(acc.onboarded && acc.lastWs && acc.ws.includes(acc.lastWs))) return go('workspace', { wsPick: acc.lastWs || '' });
+    const ws = acc.ws.includes(acc.lastWs) ? acc.lastWs : acc.ws[0];
+    if (!acc.onboarded) return go('welcome', { wsPick: ws });
+    open(ws);
+  }
+  function open(wsId) {
+    const acc = S.acc; setPref(acc.email, { lastWs: wsId }); S.acc.lastWs = wsId; sess.set({ email: acc.email, ws: wsId, exp: now() + 30 * 60e3 });
+    go('loading', { wsPick: wsId, data: null });
+    loadWorkspace(acc, wsId).then(data => go('dash', { data, tab: 'received' })).catch(e => go('loadfail', { loadErr: e.message }));
+  }
+
+  // ---------------- views ----------------
+  const brand = () => `<section class="brand"><span class="orb o1"></span><span class="orb o2"></span><div class="logo">${LOGO}</div>
+    <div><h1>Partner Portal</h1><p>Refer clients to your broker and follow every referral from first call to settlement.</p>
+    <ul><li><span>↗</span>Submit referrals in under a minute</li><li><span>◎</span>See where each client is up to</li><li><span>✓</span>Know when a loan settles</li></ul></div>
+    <div class="foot">Brokers use Finaze CRM · Partners sign in here</div></section>`;
+  const eyeSvg = '<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M2.06 12.35a1 1 0 0 1 0-.7 10.75 10.75 0 0 1 19.88 0 1 1 0 0 1 0 .7 10.75 10.75 0 0 1-19.88 0"/><circle cx="12" cy="12" r="3"/></svg>';
+  const alertBox = a => a ? `<div class="alert ${a.kind}" role="alert"><div><b>${esc(a.title)}</b>${esc(a.text)}</div></div>` : '';
+  const shellCard = (inner) => `<div class="center"><div class="card w"><div class="top">${LOGO}<button class="link" data-act="signout">Sign out</button></div>${inner}</div></div>`;
+
+  const V = {
+    signin() {
+      const locked = S.lockUntil > now(), demo = Object.entries(ACCOUNTS).map(([e, a]) => `<div class="acc"><div><b>${esc(a.name)}</b><br>${esc(a.note)}</div><button class="link" data-fill="${esc(e)}">Use</button></div>`).join('');
+      return `<div class="auth">${brand()}<main class="panel"><form class="box" id="f" novalidate>
+        <h2>Sign in</h2><p class="lede">Use the email your broker invited you with.</p>
+        ${alertBox(S.alert)}
+        <div class="field"><label for="em">Email</label><div class="ctl ${S.err.email ? 'err' : ''}"><input id="em" type="email" autocomplete="email" placeholder="name@company.com" value="${esc(S.email)}"></div>${S.err.email ? `<span class="msg">${esc(S.err.email)}</span>` : ''}</div>
+        <div class="field"><div class="row"><label for="pw">Password</label><button type="button" class="link" data-act="forgot">Forgot password?</button></div><div class="ctl ${S.err.pw ? 'err' : ''}"><input id="pw" type="password" autocomplete="current-password" placeholder="Your password"><button type="button" class="eye" data-act="eye" aria-label="Show password">${eyeSvg}</button></div>${S.err.pw ? `<span class="msg">${esc(S.err.pw)}</span>` : ''}</div>
+        <button class="btn block" id="go" ${locked ? 'disabled' : ''}>${locked ? 'Try again in a moment' : 'Sign in'}</button>
+        <details class="demo"><summary>Prototype — demo partner accounts (password ${PASSWORD})</summary>${demo}</details>
+      </form></main></div>`;
+    },
+    verify() { return shellCard(`<div class="steps"><span class="on"></span><span></span><span></span></div><div class="icon navy">✉</div><h2>Verify your email</h2><p>We sent a 6-digit code to <b>${esc(S.acc.email)}</b>. Enter it to confirm this account is yours.</p>
+      ${alertBox(S.alert)}<form id="otp" novalidate><div class="otp">${[0, 1, 2, 3, 4, 5].map(i => `<input inputmode="numeric" maxlength="1" aria-label="Digit ${i + 1}" data-i="${i}">`).join('')}</div>
+      <p style="font-size:12px">Prototype: the code is <b>123456</b>.</p><div class="row" style="margin-top:18px"><button type="button" class="link" data-act="resend">Resend code</button><button class="btn">Verify email</button></div></form>`); },
+    setup() {
+      const a = S.acc, need = S.missing || [];
+      return shellCard(`<div class="steps"><span class="on"></span><span class="on"></span><span></span></div><div class="icon amber">!</div><h2>Finish setting up your account</h2><p>A couple of details are missing. Your broker needs them to know who referrals come from.</p>
+        <div class="check"><div><span>Name</span><b>${esc(a.name)}</b></div><div><span>Email</span><b>${esc(a.email)} ✓</b></div><div><span>Broker relationship</span><b>${a.ws.length ? esc(a.ws.map(w => WORKSPACES[w].name).join(', ')) + ' ✓' : 'Not connected'}</b></div></div>
+        ${alertBox(S.alert)}<form id="setup" novalidate>
+        ${need.includes('org') ? `<div class="field"><label for="org">Organisation *</label><div class="ctl ${S.err.org ? 'err' : ''}"><input id="org" placeholder="e.g. Brown Conveyancing" value="${esc(S.f && S.f.org || '')}"></div>${S.err.org ? `<span class="msg">${esc(S.err.org)}</span>` : ''}</div>` : ''}
+        ${need.includes('role') ? `<div class="field"><label for="role">Your role *</label><div class="ctl ${S.err.role ? 'err' : ''}"><select id="role"><option value="">Choose your role</option>${['Real Estate Agent', 'Accountant', 'Financial Adviser', 'Conveyancer', 'Builder', 'Other'].map(r => `<option ${S.f && S.f.role === r ? 'selected' : ''}>${r}</option>`).join('')}</select></div>${S.err.role ? `<span class="msg">${esc(S.err.role)}</span>` : ''}</div>` : ''}
+        <button class="btn block">Save and continue</button></form>`);
+    },
+    workspace() {
+      const a = S.acc;
+      return shellCard(`<div class="icon navy">⇄</div><h2>Choose a broker workspace</h2><p>You refer clients to more than one broker. Pick where you want to work — you can switch any time from the top bar.</p>
+        <div class="ws" role="radiogroup" aria-label="Broker workspaces">${a.ws.map(id => { const w = WORKSPACES[id]; return `<button type="button" role="radio" aria-checked="${S.wsPick === id}" class="${S.wsPick === id ? 'on' : ''}" data-ws="${id}"><span class="av">${ini(w.name)}</span><span style="flex:1"><b style="display:block;color:var(--text-strong)">${esc(w.name)}</b><span style="font-size:12px;color:var(--text-muted)">Broker: ${esc(w.broker)} · You can ${a.perms.includes('submit') ? 'submit and track referrals' : 'track referrals'}</span></span>${a.lastWs === id ? '<span class="chip" style="background:var(--navy-50);color:var(--accent)">Last used</span>' : ''}</button>`; }).join('')}</div>
+        ${S.err.ws ? `<p class="msg" style="margin-bottom:12px">${esc(S.err.ws)}</p>` : ''}<button class="btn block" data-act="pickws">Continue</button>`);
+    },
+    welcome() {
+      const a = S.acc, w = WORKSPACES[S.wsPick], can = a.perms.includes('submit');
+      return shellCard(`<div class="steps"><span class="on"></span><span class="on"></span><span class="on"></span></div><div class="icon green">✓</div><h2>Welcome, ${esc(a.name.split(' ')[0])}</h2>
+        <p>You’re set up as <b>${esc(a.role)}</b> at <b>${esc(a.org)}</b>, referring clients to <b>${esc(w.name)}</b> (broker: ${esc(w.broker)}).</p>
+        <div class="feat"><div><i>↗</i><b>Submit referrals</b><span>${can ? 'Send a client’s details to your broker in seconds.' : 'Your access is view-only — ask your broker if you need to submit.'}</span></div><div><i>◎</i><b>Track progress</b><span>See when the broker calls, applies and settles.</span></div><div><i>⇣</i><b>Incoming referrals</b><span>Clients your broker refers to you show up here too.</span></div></div>
+        <button class="btn block" data-act="enter">Go to my dashboard</button>`);
+    },
+    loading() { return `<div class="app">${topbar()}<main class="wrap"><div class="head"><div><div class="skel" style="width:220px;height:22px"></div><div class="skel" style="width:300px;margin-top:10px"></div></div></div><div class="metrics">${'<div class="metric"><div class="skel" style="width:60%"></div><div class="skel" style="width:40%;height:22px;margin-top:12px"></div></div>'.repeat(4)}</div><div class="tablecard" style="padding:18px">${'<div class="skel" style="margin:14px 0"></div>'.repeat(5)}</div><p class="sr">Loading your referrals…</p></main></div>`; },
+    loadfail() { return `<div class="app">${topbar()}<main class="wrap"><div class="card" style="text-align:center;max-width:560px;margin:40px auto"><div class="icon red" style="margin:0 auto 16px">↻</div><h2>We couldn’t load your referrals</h2><p>Something went wrong reaching ${esc((WORKSPACES[S.wsPick] || {}).name || 'your broker')}. Nothing has been lost — check your connection and try again.</p><div style="margin-top:20px;display:flex;gap:8px;justify-content:center"><button class="btn" data-act="retry">Try again</button>${S.acc.ws.length > 1 ? '<button class="btn ghost" data-act="switch">Choose another workspace</button>' : ''}</div></div></main></div>`; },
+    dash() {
+      const a = S.acc, d = S.data, can = a.perms.includes('submit'), rows = S.tab === 'sent' ? d.sent : d.received, any = d.received.length + d.sent.length > 0;
+      const settled = d.received.filter(r => r.status === 'Settled').length, active = d.received.filter(r => !['Settled', 'Closed', 'Not proceeding'].includes(r.status)).length;
+      const metrics = d.received.length ? `<div class="metrics"><div class="metric"><span>Referrals submitted</span><b>${d.received.length}</b><small>All time</small></div><div class="metric"><span>In progress</span><b>${active}</b><small>Being worked on now</small></div><div class="metric"><span>Settled</span><b>${settled}</b><small>Loans that went ahead</small></div><div class="metric"><span>Sent to you</span><b>${d.sent.length}</b><small>From your broker</small></div></div>` : '';
+      const table = rows.length ? `<div class="tr h"><span>Client</span><span>Service</span><span>${S.tab === 'sent' ? 'Received' : 'Submitted'}</span><span>Status</span><span>Latest update</span></div>` + rows.map(r => `<div class="tr"><span><b>${esc(r.name)}</b></span><span class="m">${esc(r.service)}</span><span class="m">${stamp(r.at)}</span><span><span class="chip" style="background:${r.bg};color:${r.color}">${esc(r.status)}</span></span><span class="m">${esc(r.update)}</span></div>`).join('')
+        : S.tab === 'sent' ? `<div class="empty"><div class="icon navy">⇣</div><h3>No referrals from your broker yet</h3><p>When ${esc(d.ws.broker)} refers a client to you, they’ll appear here.</p></div>`
+        : `<div class="empty"><div class="icon navy">↗</div><h3>No referrals yet</h3><p>${can ? 'Refer your first client to ' + esc(d.ws.name) + '. You’ll see each step here — from first call to settlement.' : 'You have view-only access. Referrals your organisation submits will appear here.'}</p>${can ? '<button class="btn" data-act="new">Submit a referral</button>' : ''}</div>`;
+      return `<div class="app">${topbar()}<main class="wrap">
+        ${!can ? '<div class="alert info"><div><b>View-only access</b>You can track referrals in this workspace but can’t submit new ones. Ask your broker if you need submit access.</div></div>' : ''}
+        <div class="head"><div><h1>Your referrals</h1><p>${esc(d.ws.name)} · Broker: ${esc(d.ws.broker)}</p></div>${can ? '<button class="btn" data-act="new">+ Submit a referral</button>' : ''}</div>
+        ${metrics}
+        <section class="tablecard"><div class="tabs" role="tablist"><button role="tab" aria-selected="${S.tab === 'received'}" class="${S.tab === 'received' ? 'on' : ''}" data-tab="received">Your referrals<span class="n">${d.received.length}</span></button><button role="tab" aria-selected="${S.tab === 'sent'}" class="${S.tab === 'sent' ? 'on' : ''}" data-tab="sent">Sent to you<span class="n">${d.sent.length}</span></button></div>${table}</section>
+        <div class="note"><b>Prototype notes.</b> Working in the browser: the full sign-in journey, every state below, workspace choice, first-login vs returning-login routing, the dashboard reading the CRM demo data, and submitting a referral (it appears in the CRM’s Leads). <b>Needs backend:</b> real authentication and password reset, sending verification emails, session tokens and expiry, permissions from the server, and the referral API. Use the menu under your name to simulate a loading error or an expired session.</div>
+      </main>${S.modal ? modal() : ''}</div>`;
+    },
+    inactive() { return shellCard(`<div class="icon red">⦸</div><h2>Your partner account is inactive</h2><p>${esc(S.acc.org || S.acc.name)}’s access to the Partner Portal has been paused by your broker. Your referral history is safe.</p><div class="check"><div><span>What to do</span><b>Contact your broker to reactivate access</b></div></div><a class="btn ghost" href="mailto:?subject=Partner%20Portal%20access">Email my broker</a>`); },
+    noaccess() { return shellCard(`<div class="icon amber">⚑</div><h2>You’re not connected to a broker yet</h2><p>Your account (${esc(S.acc.email)}) works, but no broker has added you as a referral partner, so there’s no workspace to show.</p><div class="check"><div><span>Next step</span><b>Ask your broker to invite this email address</b></div><div><span>Already invited?</span><b>Use the link in the invitation email</b></div></div><a class="btn ghost" href="mailto:?subject=Please%20add%20me%20as%20a%20referral%20partner">Request access</a>`); },
+    denied() { return shellCard(`<div class="icon amber">🔒</div><h2>You don’t have access to referrals</h2><p>You’re connected to ${esc(S.acc.ws.map(w => WORKSPACES[w].name).join(', '))}, but your access doesn’t include viewing referrals.</p><div class="check"><div><span>Next step</span><b>Ask your broker to grant referral access</b></div></div><a class="btn ghost" href="mailto:?subject=Partner%20Portal%20permissions">Contact my broker</a>`); },
+    expired() { return `<div class="center"><div class="card w" style="text-align:center"><div class="top" style="justify-content:center">${LOGO}</div><div class="icon navy" style="margin:0 auto 16px">⏱</div><h2>Your session has expired</h2><p>For your security you were signed out after a period of inactivity. Sign in again to pick up where you left off.</p><button class="btn" style="margin-top:20px" data-act="toSignin">Sign in again</button></div></div>`; }
+  };
+  function topbar() {
+    const a = S.acc, w = WORKSPACES[S.wsPick] || { name: '' };
+    return `<header class="topbar"><div class="l"><svg class="lg" viewBox="0 0 153 47">${LOGO.replace(/^<svg[^>]*>/, '').replace(/<\/svg>$/, '')}</svg><span class="tag">Partner Portal</span>${a.ws.length > 1 ? `<button class="wsbtn" data-act="switch" title="Switch workspace">${esc(w.name)} ▾</button>` : `<span style="font-size:13px;font-weight:700;color:var(--text-strong)">${esc(w.name)}</span>`}</div>
+      <div class="user"><button data-act="menu" aria-haspopup="menu" aria-expanded="${S.menu}"><span style="text-align:right"><b style="display:block;font-size:13px;color:var(--text-strong)">${esc(a.name)}</b><span style="font-size:12px;color:var(--text-muted)">${esc(a.org)}</span></span><span class="ini">${ini(a.name)}</span></button>
+      ${S.menu ? `<div class="menu" role="menu">${a.ws.length > 1 ? '<button role="menuitem" data-act="switch">Switch workspace</button>' : ''}<button role="menuitem" data-act="signout">Sign out</button><hr><div class="lbl">Prototype tools</div><button role="menuitem" data-act="simfail">Simulate a loading error</button><button role="menuitem" data-act="simexpire">Simulate session expiry</button><button role="menuitem" data-act="reset">Reset onboarding for this account</button></div>` : ''}</div></header>`;
+  }
+  function modal() {
+    const f = S.modal, E = f.err || {};
+    const fld = (id, label, attrs, err) => `<div class="field"><label for="${id}">${label}</label><div class="ctl ${err ? 'err' : ''}"><input id="${id}" ${attrs}></div>${err ? `<span class="msg">${esc(err)}</span>` : ''}</div>`;
+    return `<div class="modal" role="dialog" aria-modal="true" aria-label="Submit a referral"><form class="card" id="ref" novalidate><h2>Submit a referral</h2><p style="margin-bottom:18px">${esc(S.data.ws.broker)} at ${esc(S.data.ws.name)} will be notified and contact your client.</p>
+      ${fld('rn', 'Client name *', `value="${esc(f.name)}" placeholder="Full name"`, E.name)}
+      <div class="grid2">${fld('re', 'Email', `type="email" value="${esc(f.email)}" placeholder="client@email.com"`, E.email)}${fld('rp', 'Phone *', `type="tel" value="${esc(f.phone)}" placeholder="0412 345 678"`, E.phone)}</div>
+      <div class="field"><label for="rs">What do they need? *</label><div class="ctl ${E.service ? 'err' : ''}"><select id="rs"><option value="">Choose a service</option>${['Home loan', 'Refinance', 'Investment property', 'Construction loan', 'First home buyer', 'Commercial lending', 'Other'].map(o => `<option ${f.service === o ? 'selected' : ''}>${o}</option>`).join('')}</select></div>${E.service ? `<span class="msg">${esc(E.service)}</span>` : ''}</div>
+      <div class="field"><label for="rnote">Notes for the broker</label><textarea id="rnote" class="ta" placeholder="Timing, budget, anything that helps">${esc(f.note)}</textarea></div>
+      <label class="consent"><input type="checkbox" id="rc" ${f.consent ? 'checked' : ''}><span>My client has agreed to be contacted by ${esc(S.data.ws.name)} about this enquiry.</span></label>${E.consent ? `<p class="msg" style="margin:-8px 0 12px">${esc(E.consent)}</p>` : ''}
+      ${E.form ? alertBox({ kind: 'bad', title: 'Couldn’t submit the referral', text: E.form }) : ''}
+      <div class="row" style="justify-content:flex-end"><button type="button" class="btn ghost" data-act="closeModal">Cancel</button><button class="btn" ${f.busy ? 'disabled' : ''}>${f.busy ? 'Submitting…' : 'Submit referral'}</button></div></form></div>`;
+  }
+  function render() { $('#app').innerHTML = V[S.view]() + (S.toast ? `<div class="toast" role="status">${esc(S.toast)}</div>` : ''); bind(); }
+
+  // ---------------- events ----------------
+  function bind() {
+    document.querySelectorAll('[data-fill]').forEach(b => b.onclick = () => { $('#em').value = b.dataset.fill; $('#pw').value = PASSWORD; S.email = b.dataset.fill; });
+    const f = $('#f'); if (f) f.onsubmit = e => { e.preventDefault(); signIn(); };
+    const otp = $('#otp'); if (otp) { const ins = [...otp.querySelectorAll('input')]; ins[0].focus(); ins.forEach((inp, i) => { inp.oninput = () => { inp.value = inp.value.replace(/\D/g, '').slice(0, 1); if (inp.value && ins[i + 1]) ins[i + 1].focus(); }; inp.onkeydown = e => { if (e.key === 'Backspace' && !inp.value && ins[i - 1]) ins[i - 1].focus(); }; inp.onpaste = e => { const t = (e.clipboardData.getData('text') || '').replace(/\D/g, '').slice(0, 6); if (t.length) { e.preventDefault(); t.split('').forEach((c, k) => { if (ins[k]) ins[k].value = c; }); } }; });
+      otp.onsubmit = e => { e.preventDefault(); const code = ins.map(x => x.value).join(''); if (code.length < 6) { S.alert = { kind: 'bad', title: 'Enter all 6 digits', text: '' }; return render(); } if (code !== '123456') { S.alert = { kind: 'bad', title: 'That code isn’t right', text: ' Check the latest email or resend a new code.' }; return render(); } setPref(S.acc.email, { verified: true }); S.alert = null; route({ ...S.acc, verified: true }); }; }
+    const su = $('#setup'); if (su) su.onsubmit = e => { e.preventDefault(); const org = $('#org') ? $('#org').value.trim() : S.acc.org, role = $('#role') ? $('#role').value : S.acc.role; S.f = { org, role }; S.err = {}; if (!org) S.err.org = 'Enter your organisation'; if (!role) S.err.role = 'Choose your role'; if (Object.keys(S.err).length) return render(); setPref(S.acc.email, { profile: { org, role } }); S.err = {}; toast('Account details saved'); route({ ...S.acc, org, role }); };
+    document.querySelectorAll('[data-ws]').forEach(b => b.onclick = () => { S.wsPick = b.dataset.ws; S.err = {}; render(); });
+    document.querySelectorAll('[data-tab]').forEach(b => b.onclick = () => { if (!alive()) return; S.tab = b.dataset.tab; render(); });
+    const rf = $('#ref'); if (rf) rf.onsubmit = e => { e.preventDefault(); submit(); };
+    document.querySelectorAll('[data-act]').forEach(b => b.onclick = e => act(b.dataset.act, e));
+  }
+  function signIn() {
+    const em = $('#em').value.trim().toLowerCase(), pw = $('#pw').value; S.email = em; S.err = {}; S.alert = null;
+    if (S.lockUntil > now()) return;
+    if (!em) S.err.email = 'Enter your email address'; else if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(em)) S.err.email = 'Enter a valid email address';
+    if (!pw) S.err.pw = 'Enter your password';
+    if (Object.keys(S.err).length) return render();
+    const acc = account(em);
+    if (!acc || pw !== PASSWORD) { const n = (S.attempts[em] || 0) + 1; S.attempts[em] = n;
+      if (n >= 5) { S.lockUntil = now() + 30e3; S.attempts[em] = 0; S.alert = { kind: 'bad', title: 'Too many attempts', text: ' For your security, sign-in is paused for 30 seconds. You can reset your password if you’ve forgotten it.' }; setTimeout(render, 30e3); }
+      else S.alert = { kind: 'bad', title: 'Email or password is incorrect', text: ' Check both and try again' + (n >= 3 ? ' — ' + (5 - n) + ' attempts left before a short pause.' : '.') };
+      return render(); }
+    S.attempts[em] = 0; route(acc);
+  }
+  function submit() {
+    if (!alive()) return;
+    const f = S.modal; f.name = $('#rn').value.trim(); f.email = $('#re').value.trim(); f.phone = $('#rp').value.trim(); f.service = $('#rs').value; f.note = $('#rnote').value.trim(); f.consent = $('#rc').checked;
+    const E = {}; if (!f.name) E.name = 'Enter the client’s name'; if (!f.phone) E.phone = 'Enter a phone number'; else if (f.phone.replace(/\D/g, '').length < 8) E.phone = 'Enter a valid phone number';
+    if (f.email && !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(f.email)) E.email = 'Enter a valid email address'; if (!f.service) E.service = 'Choose what they need'; if (!f.consent) E.consent = 'Confirm your client agreed to be contacted';
+    f.err = E; if (Object.keys(E).length) return render();
+    if (S.data.ws.source !== 'crm') { f.err = { form: 'This demo workspace isn’t connected to a CRM. Switch to Harbour Home Loans to try submitting.' }; return render(); }
+    f.busy = true; render();
+    setTimeout(() => submitReferral(S.acc, f).then(() => { S.modal = null; toast('Referral sent to ' + S.data.ws.broker); loadWorkspace(S.acc, S.wsPick).then(data => { S.data = data; S.tab = 'received'; render(); }); })
+      .catch(() => { f.busy = false; f.err = { form: 'Open the Finaze CRM in this browser once so the demo data exists, then try again.' }; render(); }), 500);
+  }
+  function act(a) {
+    const A = {
+      eye: () => { const p = $('#pw'); p.type = p.type === 'password' ? 'text' : 'password'; },
+      forgot: () => { S.alert = { kind: 'info', title: 'Password reset', text: ' We’ll email a reset link to your address. (Needs backend — not available in this prototype.)' }; render(); },
+      signout: () => { sess.clear(); go('signin', { acc: null, menu: false, data: null, alert: { kind: 'good', title: 'You’ve signed out', text: '' } }); },
+      toSignin: () => go('signin', { alert: null }),
+      resend: () => { S.alert = { kind: 'good', title: 'New code sent', text: ' Check your inbox (demo code is still 123456).' }; render(); },
+      pickws: () => { if (!S.wsPick) { S.err = { ws: 'Choose a workspace to continue' }; return render(); } S.err = {}; if (!S.acc.onboarded) return go('welcome'); open(S.wsPick); },
+      enter: () => { setPref(S.acc.email, { onboarded: true }); S.acc.onboarded = true; open(S.wsPick); },
+      retry: () => open(S.wsPick),
+      switch: () => { S.menu = false; go('workspace'); },
+      menu: () => { S.menu = !S.menu; render(); },
+      new: () => { if (!alive()) return; if (!S.acc.perms.includes('submit')) { toast('Your access is view-only'); return; } S.modal = { name: '', email: '', phone: '', service: '', note: '', consent: false, err: {} }; render(); },
+      closeModal: () => { S.modal = null; render(); },
+      simfail: () => { S.menu = false; S.failNext = true; open(S.wsPick); },
+      simexpire: () => { S.menu = false; const x = sess.get(); if (x) { x.exp = now() - 1; sess.set(x); } toast('Session expired — your next action will ask you to sign in'); },
+      reset: () => { S.menu = false; setPref(S.acc.email, { onboarded: false, lastWs: '', verified: null, profile: null }); toast('Onboarding reset — sign out and back in to see it again'); }
+    }; (A[a] || (() => {}))();
+  }
+  document.addEventListener('click', e => { if (S.menu && !e.target.closest('.user')) { S.menu = false; render(); } });
+  document.addEventListener('keydown', e => { if (e.key === 'Escape' && S.modal) { S.modal = null; render(); } });
+
+  // returning visit in the same tab: resume the session if it's still valid
+  const x = sess.get(); if (x && x.exp > now() && account(x.email)) { S.acc = account(x.email); open(x.ws); } else { if (x) { sess.clear(); S.view = 'expired'; } render(); }
+})();
+</script>
+</body>
+</html>
